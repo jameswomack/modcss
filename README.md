@@ -32,7 +32,7 @@ converts CSS into JSON objects which can be used further by libraries like
 
 Use npm to install the package:
 
-    % npm install modcss
+    % npm install modcss@1.0.0-alpha -DE
 
 And use it with browserify:
 
