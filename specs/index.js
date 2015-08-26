@@ -2,7 +2,7 @@ var browserify = require('browserify'),
     assert = require('assert'),
     vm = require('vm'),
     path = require('path'),
-    cssobjectify = require('../index');
+    modcss = require('../index');
 
 function fixture(name) {
   return path.join(__dirname, name);
@@ -12,24 +12,24 @@ function bundle(name, cb) {
   var filename = fixture(name);
   browserify()
     .require(filename, {expose: name})
-    .transform(cssobjectify)
-    .bundle(function(err, bundle) {
-      if (err) return cb(err);
+    .transform(modcss)
+    .bundle(function(err, bundl) {
+      if (err) { return cb(err); }
       var sandbox = {};
       try {
-        vm.runInNewContext(bundle, sandbox);
-      } catch (err) {
-        return cb(err);
+        vm.runInNewContext(bundl, sandbox);
+      } catch (error) {
+        return cb(error);
       }
       cb(null, sandbox);
     });
 }
 
-describe('cssobjectify', function() {
+describe('modcss', function() {
   it('transforms stylesheets into JSON objects', function(done) {
-    bundle('styles.css', function(err, bundle) {
-      if (err) return done(err);
-      var styles = bundle.require('styles.css');
+    bundle('styles.css', function(err, bundl) {
+      if (err) { return done(err); }
+      var styles = bundl.require('styles.css');
       assert.deepEqual(styles.Component, {
         fontSize: '12px',
         WebkitTransform: 'yeah'
@@ -43,9 +43,9 @@ describe('cssobjectify', function() {
   });
 
   it('transforms stylesheets into JSON objects (as a dependency)', function(done) {
-    bundle('app.js', function(err, bundle) {
-      if (err) return done(err);
-      var styles = bundle.require('app.js');
+    bundle('app.js', function(err, bundl) {
+      if (err) { return done(err); }
+      var styles = bundl.require('app.js');
       assert.deepEqual(styles.Component, {
         fontSize: '12px',
         WebkitTransform: 'yeah'

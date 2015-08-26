@@ -1,4 +1,6 @@
-# cssobjectify
+# modcss
+
+Mod CSS is based on the abandoned project [cssobjectify](https://github.com/andreypopp/cssobjectify). Issues went unanswered, the tests didn't pass, etc.
 
 Source transform for [browserify][browserify] or [dcompose][dcompose] which
 converts CSS into JSON objects which can be used further by libraries like
@@ -30,11 +32,11 @@ converts CSS into JSON objects which can be used further by libraries like
 
 Use npm to install the package:
 
-    % npm install cssobjectify
+    % npm install modcss
 
 And use it with browserify:
 
-    % browserify -t cssobjectify ./myapp.js
+    % browserify -t modcss ./myapp.js
 
 where `./myapp.js` or its dependencies can reference `*.css` files by
 `require(...)` calls.

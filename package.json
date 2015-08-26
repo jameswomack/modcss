@@ -1,25 +1,25 @@
 {
-  "name": "cssobjectify",
-  "version": "0.2.1",
+  "name": "modcss",
+  "version": "1.0.0-alpha",
   "description": "Browserify/dcompose transform to convert CSS into an JSON object",
   "main": "index.js",
   "dependencies": {
-    "css-parse": "~1.6.0",
-    "through": "~2.3.4",
-    "to-camel-case": "~0.2.0"
+    "css-parse": "2.0.0",
+    "through": "2.3.8",
+    "to-camel-case": "0.2.1"
   },
   "devDependencies": {
-    "semver": "~2.2.1",
-    "jshint": "~2.3.0",
-    "mocha": "~1.13.0",
-    "browserify": "~2.35.0"
+    "browserify": "11.0.1",
+    "jshint": "2.8.0",
+    "mocha": "^2.2.5",
+    "semver": "^5.0.1"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha -R spec ./specs/*.js"
+    "test": "mocha -R spec ./specs/index.js"
   },
   "repository": {
     "type": "git",
-    "url": "andreypopp/cssobjectify"
+    "url": "jameswomack/modcss"
   },
   "keywords": [
     "browserify",
@@ -30,6 +30,7 @@
     "json",
     "react"
   ],
-  "author": "Andrey Popp <8mayday@gmail.com>",
+  "author": "James Womack <james@womack.io>",
+  "contributors": ["Andrey Popp <8mayday@gmail.com>"],
   "license": "MIT"
 }
