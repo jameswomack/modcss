@@ -2,6 +2,10 @@
 
 Mod CSS is based on the abandoned project [cssobjectify](https://github.com/andreypopp/cssobjectify). Issues went unanswered, the tests didn't pass, etc.
 
+## TODO
+* Support Stylus as `require('foo.stylus')`
+* Provide a running GH Pages example site
+
 Source transform for [browserify][browserify] or [dcompose][dcompose] which
 converts CSS into JSON objects which can be used further by libraries like
 [React][React] to assign styles to UI components.
