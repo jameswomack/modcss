@@ -1,10 +1,12 @@
 {
   "name": "modcss",
-  "version": "1.0.0-alpha",
-  "description": "Browserify/dcompose transform to convert CSS into an JSON object",
+  "version": "1.0.0-beta0",
+  "description": "Browserify/dcompose transform to convert CSS or Stylus into an JSON object",
   "main": "index.js",
   "dependencies": {
     "css-parse": "2.0.0",
+    "nib": "1.1.0",
+    "stylus": "0.52.4",
     "through": "2.3.8",
     "to-camel-case": "0.2.1"
   },
@@ -28,9 +30,12 @@
     "dgraph",
     "css",
     "json",
+    "stylus",
     "react"
   ],
   "author": "James Womack <james@womack.io>",
-  "contributors": ["Andrey Popp <8mayday@gmail.com>"],
+  "contributors": [
+    "Andrey Popp <8mayday@gmail.com>"
+  ],
   "license": "MIT"
 }

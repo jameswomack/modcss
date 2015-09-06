@@ -13,22 +13,27 @@ function bundle(name, cb) {
   browserify()
     .require(filename, {expose: name})
     .transform(modcss)
-    .bundle(function(err, bundl) {
-      if (err) { return cb(err); }
+    .bundle(function (err, bundl) {
+      if (err) return cb(err);
       var sandbox = {};
+
       try {
         vm.runInNewContext(bundl, sandbox);
-      } catch (error) {
+      }
+
+      catch (error) {
         return cb(error);
       }
+
       cb(null, sandbox);
     });
 }
 
-describe('modcss', function() {
-  it('transforms stylesheets into JSON objects', function(done) {
-    bundle('styles.css', function(err, bundl) {
-      if (err) { return done(err); }
+describe('modcss', function () {
+  it('transforms CSS stylesheets into JSON objects', function (done) {
+    bundle('styles.css', function (err, bundl) {
+      if (err) return done(err);
+
       var styles = bundl.require('styles.css');
       assert.deepEqual(styles.Component, {
         fontSize: '12px',
@@ -42,10 +47,55 @@ describe('modcss', function() {
     });
   });
 
-  it('transforms stylesheets into JSON objects (as a dependency)', function(done) {
-    bundle('app.js', function(err, bundl) {
-      if (err) { return done(err); }
+  it('transforms Stylus stylesheets into JSON objects', function (done) {
+    bundle('styles.styl', function (err, bundl) {
+      if (err) return done(err);
+
+      var styles = bundl.require('styles.styl');
+      assert.deepEqual(styles.Component, {
+        fontSize: '12px',
+        MozTransform: 'yeah',
+        OTransform: 'yeah',
+        MsTransform: 'yeah',
+        WebkitTransform: 'yeah',
+        transform: 'yeah'
+      });
+      assert.deepEqual(styles.AnotherComponent, {
+        backgroundColor: '#f00',
+        display: 'none'
+      });
+      done();
+    });
+  });
+
+  it('transforms Stylus stylesheets into JSON objects (as a dependency)', function (done) {
+    bundle('app.js', function (err, bundl) {
+      console.info(err)
+      if (err) return done(err);
+
       var styles = bundl.require('app.js');
+      assert.deepEqual(styles.Component, {
+        fontSize: '12px',
+        MozTransform: 'yeah',
+        OTransform: 'yeah',
+        MsTransform: 'yeah',
+        WebkitTransform: 'yeah',
+        transform: 'yeah'
+      });
+      assert.deepEqual(styles.AnotherComponent, {
+        backgroundColor: '#f00',
+        display: 'none'
+      });
+      done();
+    });
+  });
+
+  it('transforms CSS stylesheets into JSON objects (as a dependency)', function (done) {
+    bundle('app-css.js', function (err, bundl) {
+      console.info(err)
+      if (err) return done(err);
+
+      var styles = bundl.require('app-css.js');
       assert.deepEqual(styles.Component, {
         fontSize: '12px',
         WebkitTransform: 'yeah'
@@ -58,3 +108,4 @@ describe('modcss', function() {
     });
   });
 });
+
