@@ -23,7 +23,7 @@ converts CSS into JSON objects which can be used further by libraries like
 `myapp.js`:
 
     var React = require('react-tools/build/modules/React');
-    var Styles = require('./styles.styl');
+    var Styles = require('./styles.styl'); // or ./styles.css
 
     var MyComponent = React.createClass({
       render: function() {
@@ -45,7 +45,7 @@ And use it with browserify:
 
     % browserify -t modcss ./myapp.js
 
-where `./myapp.js` or its dependencies can reference `*.css` files by
+where `./myapp.js` or its dependencies can reference `*.css` or `*.styl` files by
 `require(...)` calls.
 
     

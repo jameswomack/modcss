@@ -70,15 +70,20 @@ function processCSS (filename, failCB) {
 }
 
 function register () {
-  require.extensions['.styl'] = function (module, filename) {
-    var stylusString = FS.readFileSync(filename, 'utf-8')
-    var styl = compileStyl(stylusString, filename)
-    var compiled = parseCSS.call(this, styl.render(), function () {
+  function req (needsCompile, module, filename) {
+    var css = FS.readFileSync(filename, 'utf-8')
+
+    needsCompile && (css = compileStyl(css, filename).render())
+
+    var compiled = parseCSS.call(this, css, function () {
       throw new Error('error parsing ' + filename)
     })
 
     return module._compile(compiled, filename)
   }
+
+  require.extensions['.styl'] = req.bind(null, true)
+  require.extensions['.css']  = req.bind(null, false)
 }
 
 function deregister () {

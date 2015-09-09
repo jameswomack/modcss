@@ -30,7 +30,7 @@ function bundle(name, cb) {
 }
 
 describe('modcss', function () {
-  it('transforms CSS stylesheets into JSON objects', function (done) {
+  it('transforms CSS into JSON objects', function (done) {
     bundle('styles.css', function (err, bundl) {
       if (err) return done(err)
 
@@ -45,24 +45,6 @@ describe('modcss', function () {
       })
       done()
     })
-  })
-
-  it('transforms Stylus stylesheets into JSON objects (Node.js)', function () {
-    modcss.register()
-    var styles = require('./styles.styl')
-    assert.deepEqual(styles.Component, {
-      fontSize: '12px',
-      MozTransform: 'yeah',
-      OTransform: 'yeah',
-      MsTransform: 'yeah',
-      WebkitTransform: 'yeah',
-      transform: 'yeah'
-    })
-    assert.deepEqual(styles.AnotherComponent, {
-      backgroundColor: '#f00',
-      display: 'none'
-    })
-    modcss.deregister()
   })
 
   it('transforms Stylus stylesheets into JSON objects', function (done) {
@@ -86,9 +68,40 @@ describe('modcss', function () {
     })
   })
 
+  it('transforms CSS into JSON objects (Node.js)', function () {
+    modcss.register()
+    var styles = require('./styles.css')
+    assert.deepEqual(styles.Component, {
+      fontSize: '12px',
+      WebkitTransform: 'yeah'
+    })
+    assert.deepEqual(styles.AnotherComponent, {
+      backgroundColor: 'red',
+      display: 'none'
+    })
+    modcss.deregister()
+  })
+
+  it('transforms Stylus stylesheets into JSON objects (Node.js)', function () {
+    modcss.register()
+    var styles = require('./styles.styl')
+    assert.deepEqual(styles.Component, {
+      fontSize: '12px',
+      MozTransform: 'yeah',
+      OTransform: 'yeah',
+      MsTransform: 'yeah',
+      WebkitTransform: 'yeah',
+      transform: 'yeah'
+    })
+    assert.deepEqual(styles.AnotherComponent, {
+      backgroundColor: '#f00',
+      display: 'none'
+    })
+    modcss.deregister()
+  })
+
   it('transforms Stylus stylesheets into JSON objects (as a dependency)', function (done) {
     bundle('app.js', function (err, bundl) {
-      console.info(err)
       if (err) return done(err)
 
       var styles = bundl.require('app.js')
@@ -110,7 +123,6 @@ describe('modcss', function () {
 
   it('transforms CSS stylesheets into JSON objects (as a dependency)', function (done) {
     bundle('app-css.js', function (err, bundl) {
-      console.info(err)
       if (err) return done(err)
 
       var styles = bundl.require('app-css.js')
