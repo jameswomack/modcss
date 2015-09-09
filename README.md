@@ -11,6 +11,7 @@ The main use case (as of this writing) is to write your styles using expressive 
 
 ## TODO
 * Provide a running GH Pages example site
+* Provide a Webpack route to use this, whether here on in some webpack-modcss dealie
 
 ## Example
 `styles.styl`:
