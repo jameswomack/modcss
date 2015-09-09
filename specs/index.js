@@ -2,7 +2,10 @@ var browserify = require('browserify'),
     assert = require('assert'),
     vm = require('vm'),
     path = require('path'),
+    React = require('react/addons'),
     modcss = require('../index')
+
+require('babel/register')
 
 function fixture(name) {
   return path.join(__dirname, name)
@@ -30,6 +33,19 @@ function bundle(name, cb) {
 }
 
 describe('modcss', function () {
+  it('works with React components\' styles system', function () {
+    modcss.register()
+    const renderer = React.addons.TestUtils.createRenderer()
+    const MyComponent = require('./my-component.js')
+    renderer.render(MyComponent)
+    const renderedComponent = renderer.getRenderOutput()
+    assert.deepEqual(renderedComponent.props.style, {
+      backgroundColor: '#f00',
+      display: 'none'
+    })
+    modcss.deregister()
+  })
+
   it('transforms CSS into JSON objects', function (done) {
     bundle('styles.css', function (err, bundl) {
       if (err) return done(err)
@@ -39,7 +55,7 @@ describe('modcss', function () {
         fontSize: '12px',
         WebkitTransform: 'yeah'
       })
-      assert.deepEqual(styles.AnotherComponent, {
+      assert.deepEqual(styles.MyComponent, {
         backgroundColor: 'red',
         display: 'none'
       })
@@ -60,7 +76,7 @@ describe('modcss', function () {
         WebkitTransform: 'yeah',
         transform: 'yeah'
       })
-      assert.deepEqual(styles.AnotherComponent, {
+      assert.deepEqual(styles.MyComponent, {
         backgroundColor: '#f00',
         display: 'none'
       })
@@ -75,7 +91,7 @@ describe('modcss', function () {
       fontSize: '12px',
       WebkitTransform: 'yeah'
     })
-    assert.deepEqual(styles.AnotherComponent, {
+    assert.deepEqual(styles.MyComponent, {
       backgroundColor: 'red',
       display: 'none'
     })
@@ -93,7 +109,7 @@ describe('modcss', function () {
       WebkitTransform: 'yeah',
       transform: 'yeah'
     })
-    assert.deepEqual(styles.AnotherComponent, {
+    assert.deepEqual(styles.MyComponent, {
       backgroundColor: '#f00',
       display: 'none'
     })
@@ -101,10 +117,10 @@ describe('modcss', function () {
   })
 
   it('transforms Stylus stylesheets into JSON objects (as a dependency)', function (done) {
-    bundle('app.js', function (err, bundl) {
+    bundle('styles-styl.js', function (err, bundl) {
       if (err) return done(err)
 
-      var styles = bundl.require('app.js')
+      var styles = bundl.require('styles-styl.js')
       assert.deepEqual(styles.Component, {
         fontSize: '12px',
         MozTransform: 'yeah',
@@ -113,7 +129,7 @@ describe('modcss', function () {
         WebkitTransform: 'yeah',
         transform: 'yeah'
       })
-      assert.deepEqual(styles.AnotherComponent, {
+      assert.deepEqual(styles.MyComponent, {
         backgroundColor: '#f00',
         display: 'none'
       })
@@ -122,15 +138,15 @@ describe('modcss', function () {
   })
 
   it('transforms CSS stylesheets into JSON objects (as a dependency)', function (done) {
-    bundle('app-css.js', function (err, bundl) {
+    bundle('styles-css.js', function (err, bundl) {
       if (err) return done(err)
 
-      var styles = bundl.require('app-css.js')
+      var styles = bundl.require('styles-css.js')
       assert.deepEqual(styles.Component, {
         fontSize: '12px',
         WebkitTransform: 'yeah'
       })
-      assert.deepEqual(styles.AnotherComponent, {
+      assert.deepEqual(styles.MyComponent, {
         backgroundColor: 'red',
         display: 'none'
       })

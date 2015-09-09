@@ -3,7 +3,7 @@ Component {
   -webkit-transform: yeah;
 }
 
-AnotherComponent {
+MyComponent {
   background-color: red;
   display: none;
 }

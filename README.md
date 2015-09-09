@@ -1,18 +1,18 @@
-# modcss
+# ModCSS
 
 ![ModCSS](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/RAF_roundel.svg/240px-RAF_roundel.svg.png)
 
-Mod CSS is based on the abandoned project [cssobjectify](https://github.com/andreypopp/cssobjectify). Issues went unanswered, the tests didn't pass, etc. I've also added Stylus support to this module, whether used from Node.js or Browserify.
+
+ModCSS is a Node.js `require` extension **and** a source transform for [browserify][browserify] or [dcompose][dcompose] which
+converts CSS or Stylus into JSON objects which can be used further by libraries like
+[React][React] to assign styles to UI components.
 
 The main use case (as of this writing) is to write your styles using expressive Stylus syntax and isolate them to a single component, usually by assigning JSON to a React component.
 
 ## TODO
 * Provide a running GH Pages example site
 
-Node.js Require extension and Source transform for [browserify][browserify] or [dcompose][dcompose] which
-converts CSS into JSON objects which can be used further by libraries like
-[React][React] to assign styles to UI components.
-
+## Example
 `styles.styl`:
 
     MyComponent
@@ -20,42 +20,47 @@ converts CSS into JSON objects which can be used further by libraries like
       background-color red
     
 
-`myapp.js`:
+`my-component.js`:
 
-    var React = require('react-tools/build/modules/React');
-    var Styles = require('./styles.styl'); // or ./styles.css
+    const React = require('react')
+    const Styles = require('./styles.styl') // or ./styles.css
 
-    var MyComponent = React.createClass({
-      render: function() {
-        return (
-          <div style={Styles.MyComponent}>
-            Hello, world!
-          </div>
-        )
+    const MyComponent = React.createClass({
+      render: function () {
+        return <div style={Styles.MyComponent}>
+          Hello, world!
+        </div>
       }
-    });
+    })
 
 ## Usage
 
-Use npm to install the package:
+### Browserify
+
+Use **npm** to install the package:
 
     % npm install modcss -SE
 
-And use it with browserify:
+And use it with **browserify**:
 
-    % browserify -t modcss ./myapp.js
+    % browserify -t modcss ./my-component.js
 
-where `./myapp.js` or its dependencies can reference `*.css` or `*.styl` files by
+where `./my-component.js` or its dependencies can reference `*.css` or `*.styl` files by
 `require(...)` calls.
 
     
-Or in Node.js:
+### Node.js
 
 ```
 require('modcss').register()
 
-var myComponentStylesAsJSON = require('../styl/foo.styl')
+const myComponentStylesAsJSON = require('../styl/components.styl')
+
+// Use require('modcss').deregister() to remove the association with CSS & Stylus files
 ```
+
+## History
+ModCSS is based on the abandoned project [cssobjectify](https://github.com/andreypopp/cssobjectify). Issues went unanswered, the tests didn't pass, etc. I've also added Stylus support to this module, whether used from Node.js or Browserify.
 
 [browserify]: http://browserify.org
 [dcompose]: https://github.com/andreypopp/dcompose
