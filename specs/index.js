@@ -41,7 +41,8 @@ describe('modcss', function () {
     const renderedComponent = renderer.getRenderOutput()
     assert.deepEqual(renderedComponent.props.style, {
       backgroundColor: '#f00',
-      display: 'none'
+      display: 'none',
+      fontFamily: 'Geo'
     })
     modcss.deregister()
   })
@@ -78,7 +79,8 @@ describe('modcss', function () {
       })
       assert.deepEqual(styles.MyComponent, {
         backgroundColor: '#f00',
-        display: 'none'
+        display: 'none',
+        fontFamily: 'Geo'
       })
       done()
     })
@@ -111,7 +113,8 @@ describe('modcss', function () {
     })
     assert.deepEqual(styles.MyComponent, {
       backgroundColor: '#f00',
-      display: 'none'
+      display: 'none',
+      fontFamily: 'Geo'
     })
     modcss.deregister()
   })
@@ -131,7 +134,8 @@ describe('modcss', function () {
       })
       assert.deepEqual(styles.MyComponent, {
         backgroundColor: '#f00',
-        display: 'none'
+        display: 'none',
+        fontFamily: 'Geo'
       })
       done()
     })
