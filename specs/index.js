@@ -3,7 +3,10 @@ var browserify = require('browserify'),
     vm = require('vm'),
     path = require('path'),
     React = require('react/addons'),
-    modcss = require('../index')
+    webpack = require('webpack'),
+    modcss = require('../index'),
+    globalConf = require('./conf'),
+    assign = require('lodash.assign')
 
 require('babel/register')
 
@@ -154,6 +157,18 @@ describe('modcss', function () {
         backgroundColor: 'red',
         display: 'none'
       })
+      done()
+    })
+  })
+
+  it('transforms Stylus stylesheets into JSON objects (as a dependency - WP)', function (done) {
+    var localConfig = {
+      entry: './specs/styles-styl.js'
+    }
+
+    webpack(assign({}, globalConf, localConfig), function (err, response) {
+      err && console.error(err)
+      console.dir(response)
       done()
     })
   })

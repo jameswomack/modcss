@@ -90,14 +90,39 @@ function deregister () {
   delete require.extensions['.styl']
 }
 
-module.exports = function (filename) {
-
+function _browserify (filename) {
   // We're a passthrough stream if the file's not a match for `isCSS`
   if (!isCSS.exec(filename)) return through()
 
   return processCSS(filename, function (err) {
     return this.emit('error', new Error('error parsing ' + filename + ': ' + err))
   })
+}
+
+function detectWebpackEnvironment () {
+  return this.cacheable && this.async
+}
+
+function _webpackify (source) {
+  var css = source
+  var filename = this.resourcePath
+
+  var needsCompile = !isStyl.exec(filename)
+
+  needsCompile && (css = compileStyl(css, filename).render())
+
+  return parseCSS.call(this, css, function () {
+    throw new Error('error parsing ' + filename)
+  })
+}
+
+module.exports = function (filenameOrSource) {
+  var isWebpack = detectWebpackEnvironment.call(this)
+
+  if (isWebpack)
+    return _webpackify.call(this, filenameOrSource)
+  else
+    return _browserify.call(this, filenameOrSource)
 }
 
 module.exports.register   = register

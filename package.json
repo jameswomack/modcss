@@ -14,9 +14,11 @@
     "babel": "5.8.23",
     "browserify": "11.0.1",
     "jshint": "2.8.0",
+    "lodash.assign": "3.2.0",
     "mocha": "^2.2.5",
     "react": "0.13.3",
-    "semver": "^5.0.1"
+    "semver": "^5.0.1",
+    "webpack": "1.12.1"
   },
   "scripts": {
     "test": "mocha -R spec ./specs/index.js"
