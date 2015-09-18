@@ -36,7 +36,7 @@ function parseCSS (chunksReceivedFromStream, failCB) {
   })
 
   // Turn JSON into a JavaScript CommonJS file
-  var exprt = 'module.exports = ' + JSON.stringify(modExports)
+  var exprt = 'module.exports = ' + JSON.stringify(modExports) + ';'
 
   if (this.queue) {
     this.queue(exprt)
