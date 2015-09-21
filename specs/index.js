@@ -7,6 +7,8 @@ var browserify = require('browserify'),
 
 require('babel/register')
 
+const paths = [ __dirname + '/mixins' ]
+
 function fixture(name) {
   return path.join(__dirname, name)
 }
@@ -14,8 +16,10 @@ function fixture(name) {
 function bundle(name, cb) {
   var filename = fixture(name)
   browserify()
-    .require(filename, {expose: name})
-    .transform(modcss)
+    .require(filename, { expose: name })
+    .transform(modcss, {
+      paths : paths
+    })
     .bundle(function (err, bundl) {
       if (err) return cb(err)
       var sandbox = {}
@@ -34,7 +38,7 @@ function bundle(name, cb) {
 
 describe('modcss', function () {
   it('works with React components\' styles system', function () {
-    modcss.register()
+    modcss.register(paths)
     const renderer = React.addons.TestUtils.createRenderer()
     const MyComponent = require('./my-component.js')
     renderer.render(MyComponent)

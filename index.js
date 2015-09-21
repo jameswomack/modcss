@@ -45,14 +45,17 @@ function parseCSS (chunksReceivedFromStream, failCB) {
     return exprt
 }
 
-function compileStyl (stylusString, pathToStylusFile) {
-  return stylus(stylusString)
+function compileStyl (stylusString, pathToStylusFile, paths) {
+  var styl = stylus(stylusString)
     .set('filename', pathToStylusFile)
     .set('compress', true)
-    .use(nib())
+
+  ; paths && paths.length && (styl = styl.set('paths', paths))
+
+  return styl.use(nib())
 }
 
-function processCSS (filename, failCB) {
+function processCSS (filename, paths, failCB) {
   var chunksReceivedFromStream = ''
 
   return through(
@@ -62,18 +65,20 @@ function processCSS (filename, failCB) {
 
     function doneReceivingChunksFromStream () {
       if (isStyl.exec(filename)) {
-        var styl = compileStyl(chunksReceivedFromStream, filename)
+        var styl = compileStyl(chunksReceivedFromStream, filename, paths)
         return parseCSS.call(this, styl.render(), failCB)
       } else
         return parseCSS.call(this, chunksReceivedFromStream, failCB)
     })
 }
 
-function register () {
+function register (paths) {
+  paths = paths || [ ]
+
   function req (needsCompile, module, filename) {
     var css = FS.readFileSync(filename, 'utf-8')
 
-    needsCompile && (css = compileStyl(css, filename).render())
+    needsCompile && (css = compileStyl(css, filename, paths).render())
 
     var compiled = parseCSS.call(this, css, function () {
       throw new Error('error parsing ' + filename)
@@ -90,12 +95,14 @@ function deregister () {
   delete require.extensions['.styl']
 }
 
-module.exports = function (filename) {
+// The Browserify transform
+module.exports = function (filename, options) {
+  const paths = options.paths || options._flags.paths || [ ]
 
   // We're a passthrough stream if the file's not a match for `isCSS`
   if (!isCSS.exec(filename)) return through()
 
-  return processCSS(filename, function (err) {
+  return processCSS(filename, paths, function (err) {
     return this.emit('error', new Error('error parsing ' + filename + ': ' + err))
   })
 }
