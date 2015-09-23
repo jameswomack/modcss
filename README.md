@@ -44,7 +44,7 @@ Use **npm** to install the package:
 
 And use it with **browserify**:
 
-    % browserify -t modcss ./my-component.js
+    % browserify -t [ modcss --paths somePathHere ] ./my-component.js
 
 where `./my-component.js` or its dependencies can reference `*.css` or `*.styl` files by
 `require(...)` calls.
@@ -53,7 +53,7 @@ where `./my-component.js` or its dependencies can reference `*.css` or `*.styl` 
 ### Node.js
 
 ```
-require('modcss').register()
+require('modcss').register(/* optionally pass paths to Stylus here */)
 
 const myComponentStylesAsJSON = require('../styl/components.styl')
 

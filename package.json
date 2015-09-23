@@ -1,6 +1,6 @@
 {
   "name": "modcss",
-  "version": "1.1.2-alpha",
+  "version": "1.2.0-alpha",
   "description": "Node.js Require extension and Browserify/dcompose transform to convert CSS or Stylus into an JSON object",
   "main": "index.js",
   "dependencies": {
