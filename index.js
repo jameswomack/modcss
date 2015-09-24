@@ -97,7 +97,7 @@ function deregister () {
 
 // The Browserify transform
 module.exports = function (filename, options) {
-  const paths = options.paths || options._flags.paths || [ ]
+  const paths = options.paths || (options._flags && options._flags.paths) || [ ]
 
   // We're a passthrough stream if the file's not a match for `isCSS`
   if (!isCSS.exec(filename)) return through()
