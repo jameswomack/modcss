@@ -3,6 +3,9 @@ var browserify = require('browserify'),
     vm = require('vm'),
     path = require('path'),
     React = require('react/addons'),
+    webpack = require('webpack'),
+    globalConf = require('./conf'),
+    assign = require('lodash.assign'),
     modcss = require('../index')
 
 require('babel/register')
@@ -105,7 +108,7 @@ describe('modcss', function () {
   })
 
   it('transforms Stylus stylesheets into JSON objects (Node.js)', function () {
-    modcss.register()
+    modcss.register(paths)
     var styles = require('./styles.styl')
     assert.deepEqual(styles.Component, {
       fontSize: '12px',
@@ -158,6 +161,19 @@ describe('modcss', function () {
         backgroundColor: 'red',
         display: 'none'
       })
+      done()
+    })
+  })
+
+  it('transforms Stylus stylesheets into JSON objects (as a dependency - WP)', function (done) {
+    var localConfig = {
+      entry: './specs/styles-styl-webpack.js'
+    }
+
+    webpack(assign({}, globalConf, localConfig), function (err, response) {
+      assert.ok(!err)
+      const bundleJS = response.compilation.assets['bundle.js']
+      assert.ok(bundleJS._source.children[0].children[5].children[7].children[1]._source._source._source._name.match(/styles.styl$/))
       done()
     })
   })

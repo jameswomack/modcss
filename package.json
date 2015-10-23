@@ -8,18 +8,21 @@
     "nib": "1.1.0",
     "stylus": "0.52.4",
     "through": "2.3.8",
-    "to-camel-case": "0.2.1"
+    "to-camel-case": "0.2.1",
+    "webpack-parse-query": "1.0.0"
   },
   "devDependencies": {
     "babel": "5.8.23",
     "browserify": "11.0.1",
     "jshint": "2.8.0",
+    "lodash.assign": "3.2.0",
     "mocha": "^2.2.5",
     "react": "0.13.3",
-    "semver": "^5.0.1"
+    "semver": "^5.0.1",
+    "webpack": "1.12.2"
   },
   "scripts": {
-    "test": "mocha -R spec ./specs/index.js"
+    "test": "mocha --harmony -R spec ./specs/index.js"
   },
   "repository": {
     "type": "git",
