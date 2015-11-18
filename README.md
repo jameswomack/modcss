@@ -19,7 +19,7 @@ The main use case (as of this writing) is to write your styles using expressive 
     MyComponent
       font-size 12px
       background-color red
-    
+
 
 `my-component.js`:
 
@@ -49,11 +49,19 @@ And use it with **browserify**:
 where `./my-component.js` or its dependencies can reference `*.css` or `*.styl` files by
 `require(...)` calls.
 
-    
+Or programmatically with **browserify** (for instance, via **gulp**):
+
+    var browserify = require('browserify');
+    var modcss = require('modcss');
+
+    // in your task
+    var b = browserify(config);
+    b.transform(modcss, { paths: [ somePathHere ] });
+
 ### Node.js
 
 ```
-require('modcss').register(/* optionally pass paths to Stylus here */)
+require('modcss').register(/* optionally pass an array of paths to Stylus here */)
 
 const myComponentStylesAsJSON = require('../styl/components.styl')
 
