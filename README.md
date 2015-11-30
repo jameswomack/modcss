@@ -2,6 +2,7 @@
 
 ![ModCSS](https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/RAF_roundel.svg/240px-RAF_roundel.svg.png)
 
+[![Build Status](https://travis-ci.org/jameswomack/modcss.svg?branch=master)](https://travis-ci.org/jameswomack/modcss)
 
 ModCSS is a Node.js `require` extension **and** a source transform for [browserify][browserify] or [dcompose][dcompose] which
 converts CSS or Stylus into JSON objects which can be used further by libraries like
