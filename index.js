@@ -1,12 +1,12 @@
-var FS = require('fs'),
-    parse = require('css-parse'),
-    stylus = require('stylus'),
-    nib = require('nib'),
-    toCamelCase = require('to-camel-case'),
-    through = require('through')
+const FS          = require('fs'),
+      parse       = require('css-parse'),
+      stylus      = require('stylus'),
+      nib         = require('nib'),
+      toCamelCase = require('to-camel-case'),
+      through     = require('through')
 
-var isCSS  = /\.(csso|css|styl|sass|scss|less)$/
-var isStyl = /\.styl$/
+const isCSS  = /\.(csso|css|styl|sass|scss|less)$/
+const isStyl = /\.styl$/
 
 function parseCSS (chunksReceivedFromStream, failCB) {
   var tree,
@@ -36,7 +36,7 @@ function parseCSS (chunksReceivedFromStream, failCB) {
   })
 
   // Turn JSON into a JavaScript CommonJS file
-  var exprt = 'module.exports = ' + JSON.stringify(modExports) + ';'
+  const exprt = 'module.exports = ' + JSON.stringify(modExports) + ';'
 
   if (this.queue) {
     this.queue(exprt)
@@ -97,7 +97,7 @@ function deregister () {
 
 // The Browserify transform
 module.exports = function (filename, options) {
-  const paths = options.paths || (options._flags && options._flags.paths) || [ ]
+  const paths = options.paths || options._flags && options._flags.paths || [ ]
 
   // We're a passthrough stream if the file's not a match for `isCSS`
   if (!isCSS.exec(filename)) return through()
