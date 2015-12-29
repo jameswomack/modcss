@@ -1,66 +1,30 @@
-var browserify = require('browserify'),
-    assert = require('assert'),
-    vm = require('vm'),
-    path = require('path'),
-    React = require('react/addons'),
-    modcss = require('../index')
+// DOC: https://babeljs.io/docs/usage/require/
+require('babel-register') // For /lib and JSX
 
-require('babel/register')
+const Assert     = require('assert')
+const Bundler    = require('./lib/bundler')
+const Node       = require('../lib/node')
+const assign     = require('lodash.assign')
+const webpack    = require('webpack')
 
-const paths = [ __dirname + '/mixins' ]
+const globalConf        = require('./conf')
+const globalConfWithNib = require('./conf-nib')
 
-function fixture(name) {
-  return path.join(__dirname, name)
-}
+const bundle  = Bundler.bundle
 
-function bundle(name, cb) {
-  var filename = fixture(name)
-  browserify()
-    .require(filename, { expose: name })
-    .transform(modcss, {
-      paths : paths
-    })
-    .bundle(function (err, bundl) {
-      if (err) return cb(err)
-      var sandbox = {}
+const registerMixins = Node.register.bind(Node, Bundler.paths)
 
-      try {
-        vm.runInNewContext(bundl, sandbox)
-      }
-
-      catch (error) {
-        return cb(error)
-      }
-
-      cb(null, sandbox)
-    })
-}
-
-describe('modcss', function () {
-  it('works with React components\' styles system', function () {
-    modcss.register(paths)
-    const renderer = React.addons.TestUtils.createRenderer()
-    const MyComponent = require('./my-component.js')
-    renderer.render(MyComponent)
-    const renderedComponent = renderer.getRenderOutput()
-    assert.deepEqual(renderedComponent.props.style, {
-      backgroundColor: '#f00',
-      display: 'none',
-      fontFamily: 'Geo'
-    })
-    modcss.deregister()
-  })
-
-  it('transforms CSS into JSON objects', function (done) {
+describe('ModCSS', function () {
+  it('transforms CSS into JSON', function (done) {
     bundle('styles.css', function (err, bundl) {
       if (err) return done(err)
 
-      var styles = bundl.require('styles.css')
-      assert.deepEqual(styles.Component, {
+      const styles = bundl.require('styles.css')
+      Assert.deepEqual(styles.Component, {
         fontSize: '12px',
         WebkitTransform: 'yeah'
       })
-      assert.deepEqual(styles.MyComponent, {
+      Assert.deepEqual(styles.MyComponent, {
         backgroundColor: 'red',
         display: 'none'
       })
@@ -68,20 +32,16 @@ describe('modcss', function () {
     })
   })
 
-  it('transforms Stylus stylesheets into JSON objects', function (done) {
+  it('transforms Stylus stylesheets into JSON', function (done) {
     bundle('styles.styl', function (err, bundl) {
       if (err) return done(err)
 
-      var styles = bundl.require('styles.styl')
-      assert.deepEqual(styles.Component, {
+      const styles = bundl.require('styles.styl')
+      Assert.deepEqual(styles.Component, {
         fontSize: '12px',
-        MozTransform: 'yeah',
-        OTransform: 'yeah',
-        MsTransform: 'yeah',
-        WebkitTransform: 'yeah',
         transform: 'yeah'
       })
-      assert.deepEqual(styles.MyComponent, {
+      Assert.deepEqual(styles.MyComponent, {
         backgroundColor: '#f00',
         display: 'none',
         fontFamily: 'Geo'
@@ -90,53 +50,78 @@ describe('modcss', function () {
     })
   })
 
-  it('transforms CSS into JSON objects (Node.js)', function () {
-    modcss.register()
-    var styles = require('./styles.css')
-    assert.deepEqual(styles.Component, {
+  it('transforms CSS into JSON (Node.js)', function () {
+    Node.register()
+    const styles = require('./styles.css')
+    Assert.deepEqual(styles.Component, {
       fontSize: '12px',
       WebkitTransform: 'yeah'
     })
-    assert.deepEqual(styles.MyComponent, {
+    Assert.deepEqual(styles.MyComponent, {
       backgroundColor: 'red',
       display: 'none'
     })
-    modcss.deregister()
+    Node.deregister()
   })
 
-  it('transforms Stylus stylesheets into JSON objects (Node.js)', function () {
-    modcss.register()
-    var styles = require('./styles.styl')
-    assert.deepEqual(styles.Component, {
+  it('transforms Stylus stylesheets that use nib', function (done) {
+    bundle('styles-nib.styl', function (err, bundl) {
+      if (err) return done(err)
+
+      const styles = bundl.require('styles-nib.styl')
+      Assert.deepEqual(styles.MyComponent, {
+        backgroundColor: '#f00',
+        display: 'none',
+        transform: 'scale(2)',
+        MozTransform: 'scale(2)',
+        OTransform: 'scale(2)',
+        MsTransform: 'scale(2)',
+        WebkitTransform: 'scale(2)'
+      })
+      done()
+    }, true)
+  })
+
+  it('transforms Stylus stylesheets that use nib (Node.js)', function () {
+    registerMixins(true)
+    const styles = require('./styles-nib.styl')
+    Assert.deepEqual(styles.MyComponent, {
+      backgroundColor: '#f00',
+      display: 'none',
+      transform: 'scale(2)',
+      MozTransform: 'scale(2)',
+      OTransform: 'scale(2)',
+      MsTransform: 'scale(2)',
+      WebkitTransform: 'scale(2)'
+    })
+    Node.deregister()
+  })
+
+  it('transforms Stylus stylesheets into JSON (Node.js)', function () {
+    registerMixins()
+    const styles = require('./styles.styl')
+    Assert.deepEqual(styles.Component, {
       fontSize: '12px',
-      MozTransform: 'yeah',
-      OTransform: 'yeah',
-      MsTransform: 'yeah',
-      WebkitTransform: 'yeah',
       transform: 'yeah'
     })
-    assert.deepEqual(styles.MyComponent, {
+    Assert.deepEqual(styles.MyComponent, {
       backgroundColor: '#f00',
       display: 'none',
       fontFamily: 'Geo'
     })
-    modcss.deregister()
+    Node.deregister()
   })
 
-  it('transforms Stylus stylesheets into JSON objects (as a dependency)', function (done) {
+  it('transforms Stylus stylesheets into JSON (as a dependency)', function (done) {
     bundle('styles-styl.js', function (err, bundl) {
       if (err) return done(err)
 
-      var styles = bundl.require('styles-styl.js')
-      assert.deepEqual(styles.Component, {
+      const styles = bundl.require('styles-styl.js')
+      Assert.deepEqual(styles.Component, {
         fontSize: '12px',
-        MozTransform: 'yeah',
-        OTransform: 'yeah',
-        MsTransform: 'yeah',
-        WebkitTransform: 'yeah',
         transform: 'yeah'
       })
-      assert.deepEqual(styles.MyComponent, {
+      Assert.deepEqual(styles.MyComponent, {
         backgroundColor: '#f00',
         display: 'none',
         fontFamily: 'Geo'
@@ -145,21 +130,50 @@ describe('modcss', function () {
     })
   })
 
-  it('transforms CSS stylesheets into JSON objects (as a dependency)', function (done) {
+  it('transforms CSS stylesheets into JSON (as a dependency)', function (done) {
     bundle('styles-css.js', function (err, bundl) {
       if (err) return done(err)
 
-      var styles = bundl.require('styles-css.js')
-      assert.deepEqual(styles.Component, {
+      const styles = bundl.require('styles-css.js')
+      Assert.deepEqual(styles.Component, {
         fontSize: '12px',
         WebkitTransform: 'yeah'
       })
-      assert.deepEqual(styles.MyComponent, {
+      Assert.deepEqual(styles.MyComponent, {
         backgroundColor: 'red',
         display: 'none'
       })
       done()
     })
   })
+
+  it('transforms Stylus stylesheets into JSON (as a dependency - WP)', function (done) {
+    const localConfig = {
+      entry: './specs/styles-styl-webpack.js'
+    }
+
+    webpack(assign({}, globalConf, localConfig), function (err, response) {
+      Assert.ok(!err)
+      const bundleJS = response.compilation.assets['bundle.js']
+      Assert.ok(bundleJS._source.children[0].children[5].children[7].children[1]._source._source._source._name.match(/styles.styl$/))
+      done()
+    })
+  })
+
+  it('transforms Stylus stylesheets with nib into JSON (as a dependency - WP)', function (done) {
+    const localConfig = {
+      entry: './specs/styles-styl-webpack-nib.js'
+    }
+
+    webpack(assign({}, globalConfWithNib, localConfig), function (err, response) {
+      Assert.ok(!err)
+      const bundleJS = response.compilation.assets['bundle.js']
+      Assert.ok(bundleJS._source.children[0].children[5].children[7].children[1]._source._source._source._name.match(/styles-nib.styl$/))
+      done()
+    })
+  })
+
+  require('./react')
+
 })
 

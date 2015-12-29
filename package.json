@@ -1,25 +1,32 @@
 {
   "name": "modcss",
-  "version": "1.3.0",
-  "description": "Node.js Require extension and Browserify/dcompose transform to convert CSS or Stylus into an JSON object",
+  "version": "2.0.0",
+  "description": "Node.js require extension, Browserify/dcompose transform & Webpack loader for converting CSS|Stylus into JSON",
   "main": "index.js",
   "dependencies": {
     "css-parse": "2.0.0",
-    "nib": "1.1.0",
-    "stylus": "0.52.4",
+    "nib": "^1.0.0",
+    "stylus": "^0.53.0",
     "through": "2.3.8",
-    "to-camel-case": "0.2.1"
+    "to-camel-case": "0.2.1",
+    "webpack-parse-query": "1.0.0"
   },
   "devDependencies": {
-    "babel": "5.8.23",
-    "browserify": "11.0.1",
+    "babel-preset-es2015": "6.3.13",
+    "babel-preset-react": "6.3.13",
+    "babel-register": "6.3.13",
+    "browserify": "12.0.1",
+    "eslint-plugin-react": "^3.8.0",
     "jshint": "2.8.0",
+    "lodash.assign": "3.2.0",
     "mocha": "^2.2.5",
+    "nib": "1.1.0",
     "react": "0.13.3",
-    "semver": "^5.0.1"
+    "semver": "5.1.0",
+    "webpack": "1.12.2"
   },
   "scripts": {
-    "test": "mocha -R spec ./specs/index.js"
+    "test": "make test"
   },
   "repository": {
     "type": "git",
@@ -41,8 +48,8 @@
   ],
   "author": "James Womack <james@womack.io>",
   "contributors": [
-    "kmudrick (@kmudrick)",
-    "Andrey Popp <8mayday@gmail.com>"
+    "Andrey Popp <8mayday@gmail.com>",
+    "kmudrick (@kmudrick)"
   ],
   "license": "MIT"
 }

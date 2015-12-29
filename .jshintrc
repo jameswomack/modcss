@@ -3,7 +3,6 @@
   "unused": "vars",
   "asi": true,
   "expr": true,
-  "globalstrict": true,
   "globals": {
     "Buffer": false,
     "require": false,
