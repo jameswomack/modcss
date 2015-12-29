@@ -1,19 +1,22 @@
-var browserifyTransform = require('./lib/browserify')
-var webpackLoader       = require('./lib/webpack')
-var Node                = require('./lib/node')
-
-var deregister = Node.deregister.bind(Node)
-var register   = Node.register.bind(Node)
-
 function isWebpackEnv (context) {
-  return typeof context.exec !== 'undefined'
+  const contextIsDefined = !!context
+  return contextIsDefined && typeof context.exec !== 'undefined'
 }
 
 // Browserify transform or Webpack Loader
 module.exports = function () {
   // I'd put the transform first, but testing for Webpack is easier
-  return (isWebpackEnv(this) ? webpackLoader : browserifyTransform).apply(this, arguments)
+  return (isWebpackEnv(this) ? require('./lib/webpack') : require('./lib/browserify')).apply(this, arguments)
 }
 
-module.exports.register   = register
-module.exports.deregister = deregister
+Object.defineProperty(module.exports, 'register', {
+  get: function () {
+    return require('./lib/node').register
+  }
+})
+
+Object.defineProperty(module.exports, 'deregister', {
+  get: function () {
+    return require('./lib/node').deregister
+  }
+})

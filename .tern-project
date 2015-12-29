@@ -1,0 +1,16 @@
+{
+  "libs": [
+    "browser",
+    "ecma5",
+    "ecma6"
+  ],
+  "loadEagerly": [
+    "./node_modules/through/index.js",
+    "./node_modules/css-parse/index.js",
+    "./node_modules/nib/lib/nib.js",
+    "./lib/*.js"
+  ],
+  "plugins": {
+    "node": {}
+  }
+}
