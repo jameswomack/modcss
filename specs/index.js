@@ -174,6 +174,7 @@ describe('ModCSS', function () {
   })
 
   require('./react')
+  require('./serialization')
 
 })
 
