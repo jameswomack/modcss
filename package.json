@@ -1,6 +1,6 @@
 {
   "name": "modcss",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Node.js require extension, Browserify/dcompose transform & Webpack loader for converting CSS|Stylus into JSON",
   "main": "index.js",
   "dependencies": {
