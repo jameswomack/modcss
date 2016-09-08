@@ -1,3 +1,18 @@
+<a name="2.1.0"></a>
+## 2.1.0 (2016-09-08)
+
+
+#### Bug Fixes
+
+* **lint:** Remove gratuitous parens ([bff7395f](jameswomack/modcss/commit/bff7395f))
+* **travis:** rm stable ([f908f017](jameswomack/modcss/commit/f908f017))
+
+
+#### Features
+
+* serialization ([d2c46a35](jameswomack/modcss/commit/d2c46a35))
+
+
 ## 2.0.0 (2015-12-28)
 ### Features
 - Experimental Webpack support
