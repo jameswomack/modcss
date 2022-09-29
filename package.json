@@ -6,7 +6,7 @@
   "dependencies": {
     "css-parse": "2.0.0",
     "nib": "^1.0.0",
-    "stylus": "^0.53.0",
+    "stylus": "^0.54.3",
     "through": "2.3.8",
     "to-camel-case": "0.2.1",
     "webpack-parse-query": "1.0.0"
